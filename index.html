@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>10‑Question Quiz (A–D)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --muted: #94a3b8;
+      --text: #e5e7eb;
+      --accent: #6366f1;
+      --accent-2: #22d3ee;
+      --danger: #ef4444;
+      --ok: #22c55e;
+      --ring: rgba(99,102,241,.45);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b1023 0%, #0f172a 100%);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 20px 44px;
+    }
+    .card {
+      background: radial-gradient(1200px 600px at 100% -100%, rgba(99,102,241,.15), transparent 60%),
+                  radial-gradient(800px 400px at -40% 0%, rgba(34,211,238,.15), transparent 55%),
+                  var(--card);
+      border: 1px solid rgba(148,163,184,.15);
+      border-radius: var(--radius);
+      box-shadow:
+        0 10px 30px rgba(2,6,23,.4),
+        inset 0 0 0 1px rgba(255,255,255,.02);
+      padding: 22px;
+    }
+    h1 {
+      font-size: clamp(20px, 2.4vw, 28px);
+      margin: 0 0 8px;
+      letter-spacing: .2px;
+    }
+    .sub { color: var(--muted); margin-bottom: 18px; font-size: 14px; }
+    .q {
+      margin: 18px 0 20px;
+      padding: 16px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.14);
+      background: rgba(2,6,23,.35);
+    }
+    .q h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+    .opts { display: grid; gap: 10px; }
+    .opt {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,.18);
+      background: rgba(255,255,255,.02);
+      transition: transform .06s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .opt:hover {
+      transform: translateY(-1px);
+      border-color: var(--ring);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+    .opt input { accent-color: var(--accent); margin-top: 3px; }
+    .label {
+      display: inline-flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .badge {
+      display: inline-block;
+      min-width: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 20px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.22);
+      color: var(--muted);
+      background: rgba(148,163,184,.08);
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid rgba(148,163,184,.2);
+      background: linear-gradient(180deg, rgba(99,102,241,.18), rgba(99,102,241,.12));
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: .2px;
+      transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(99,102,241,.25); border-color: var(--accent); }
+    button.secondary { background: transparent; }
+    .result {
+      margin-top: 18px;
+      padding: 16px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.2);
+      background: rgba(2,6,23,.5);
+      display: none;
+    }
+    .score { font-weight: 800; font-size: 18px; margin-bottom: 6px; }
+    .msg { color: var(--muted); }
+    .ok { color: var(--ok); }
+    .bad { color: var(--danger); }
+    .foot {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+    .req { font-size: 12px; color: var(--danger); display: none; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>MINI_quiz with MICRO_prizes: 10 questions</h1>
+      <div class="sub">Choose one answer for each question. The answers can be found on this page, sometimes by clicking the gallery image, and also inside the apartment.</div>
+
+      <script>
+        const X1 = 'C';
+        const X2 = 'D';
+        const X3 = 'B';
+        const X4 = 'A';
+        const X5 = 'A';
+        const X6 = 'D';
+        const X7 = 'C';
+        const X8 = 'C';
+        const X9 = 'B';
+        const X10 = 'C';
+      </script>
+
+      <form id="quiz" autocomplete="off">
+        <div class="q" data-q="1">
+          <h2>1. What is the name of the capybara's owner?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q1" value="A"><span class="label"><span class="badge">A</span> Capybara Barbara</span></label>
+            <label class="opt"><input type="radio" name="q1" value="B"><span class="label"><span class="badge">B</span> Capybara Dagmara</span></label>
+            <label class="opt"><input type="radio" name="q1" value="C"><span class="label"><span class="badge">C</span> Capybara Tita</span></label>
+            <label class="opt"><input type="radio" name="q1" value="D"><span class="label"><span class="badge">D</span> Capybara Sara</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="2">
+          <h2>2. What is a capybara?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q2" value="A"><span class="label"><span class="badge">A</span> A type of aquatic boar</span></label>
+            <label class="opt"><input type="radio" name="q2" value="B"><span class="label"><span class="badge">B</span> A South American fish</span></label>
+            <label class="opt"><input type="radio" name="q2" value="C"><span class="label"><span class="badge">C</span> A water pig</span></label>
+            <label class="opt"><input type="radio" name="q2" value="D"><span class="label"><span class="badge">D</span> An oversized guinea pig</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="3">
+          <h2>3. How many birds can you count on the paintings in the orange bedroom?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q3" value="A"><span class="label"><span class="badge">A</span> Two</span></label>
+            <label class="opt"><input type="radio" name="q3" value="B"><span class="label"><span class="badge">B</span> Five</span></label>
+            <label class="opt"><input type="radio" name="q3" value="C"><span class="label"><span class="badge">C</span> Seven</span></label>
+            <label class="opt"><input type="radio" name="q3" value="D"><span class="label"><span class="badge">D</span> Three</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="4">
+          <h2>4. The Krakow urban capybara in Latin is...</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q4" value="A"><span class="label"><span class="badge">A</span> Hydrohoerus cracoviensis urbanus</span></label>
+            <label class="opt"><input type="radio" name="q4" value="B"><span class="label"><span class="badge">B</span> Hydrochoeris domesticus cracovii</span></label>
+            <label class="opt"><input type="radio" name="q4" value="C"><span class="label"><span class="badge">C</span> Krakowskus kapibarus miejskus</span></label>
+            <label class="opt"><input type="radio" name="q4" value="D"><span class="label"><span class="badge">D</span> Hydrochoerus hydrochoeris cracovianum</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="5">
+          <h2>5. Where can you buy the iconic baguette‑pizzas on Krakow's Kazimierz?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q5" value="A"><span class="label"><span class="badge">A</span> Endzior</span></label>
+            <label class="opt"><input type="radio" name="q5" value="B"><span class="label"><span class="badge">B</span> Majster</span></label>
+            <label class="opt"><input type="radio" name="q5" value="C"><span class="label"><span class="badge">C</span> Kazek</span></label>
+            <label class="opt"><input type="radio" name="q5" value="D"><span class="label"><span class="badge">D</span> Zapiex</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="6">
+          <h2>6. What costume is the owner's brother wearing?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q6" value="A"><span class="label"><span class="badge">A</span> Wawel Dragon</span></label>
+            <label class="opt"><input type="radio" name="q6" value="B"><span class="label"><span class="badge">B</span> Hogwarts student</span></label>
+            <label class="opt"><input type="radio" name="q6" value="C"><span class="label"><span class="badge">C</span> Bat</span></label>
+            <label class="opt"><input type="radio" name="q6" value="D"><span class="label"><span class="badge">D</span> Lajkonik</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="7">
+          <h2>7. What rock formation appears in the illustration describing Krakow's valleys?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q7" value="A"><span class="label"><span class="badge">A</span> God's Finger</span></label>
+            <label class="opt"><input type="radio" name="q7" value="B"><span class="label"><span class="badge">B</span> Lonely Outlier</span></label>
+            <label class="opt"><input type="radio" name="q7" value="C"><span class="label"><span class="badge">C</span> Hercules' Club</span></label>
+            <label class="opt"><input type="radio" name="q7" value="D"><span class="label"><span class="badge">D</span> Obelix's Obelisk</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="8">
+          <h2>8. What kind of "meat" will a capybara eat?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q8" value="A"><span class="label"><span class="badge">A</span> Schnitzel</span></label>
+            <label class="opt"><input type="radio" name="q8" value="B"><span class="label"><span class="badge">B</span> Liver with onions</span></label>
+            <label class="opt"><input type="radio" name="q8" value="C"><span class="label"><span class="badge">C</span> Seitan</span></label>
+            <label class="opt"><input type="radio" name="q8" value="D"><span class="label"><span class="badge">D</span> Raw steak</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="9">
+          <h2>9. How many cotton balls hide the cables in the apartment?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q9" value="A"><span class="label"><span class="badge">A</span> Four</span></label>
+            <label class="opt"><input type="radio" name="q9" value="B"><span class="label"><span class="badge">B</span> Five</span></label>
+            <label class="opt"><input type="radio" name="q9" value="C"><span class="label"><span class="badge">C</span> Six</span></label>
+            <label class="opt"><input type="radio" name="q9" value="D"><span class="label"><span class="badge">D</span> Seven</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="q" data-q="10">
+          <h2>10. How many feathers are in the crown of the capybara dressed as an ancient Maya?</h2>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q10" value="A"><span class="label"><span class="badge">A</span> Zero</span></label>
+            <label class="opt"><input type="radio" name="q10" value="B"><span class="label"><span class="badge">B</span> One</span></label>
+            <label class="opt"><input type="radio" name="q10" value="C"><span class="label"><span class="badge">C</span> Two</span></label>
+            <label class="opt"><input type="radio" name="q10" value="D"><span class="label"><span class="badge">D</span> Three</span></label>
+          </div>
+          <div class="req">Select an answer to continue.</div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="submitBtn">Submit answers</button>
+          <button type="reset" class="secondary" id="resetBtn">Clear answers</button>
+        </div>
+      </form>
+
+      <div class="result" id="resultBox" aria-live="polite">
+        <div class="score" id="scoreLine"></div>
+        <div class="msg" id="messageLine"></div>
+      </div>
+
+      <div class="foot">Answer all questions. <strong>You can try as many times as you like until you earn a MICRO_prize — and then test the remaining guests too ;)</strong></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const form = document.getElementById('quiz');
+      const resultBox = document.getElementById('resultBox');
+      const scoreLine = document.getElementById('scoreLine');
+      const messageLine = document.getElementById('messageLine');
+      const submitBtn = document.getElementById('submitBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      const MSG_1 = "Half or more answers are incorrect — search for the right ones and try again. The MICRO_prize is waiting :)";
+      const MSG_2 = "You're close, but still have more than 3 mistakes — don't give up, the MICRO_prize is near :)";
+      const MSG_3 = "Bravo! You deserve a prize — in the drawers under the TV you'll find a small box with MICRO_capybaras like the ones under the quiz. Take one or a few as a souvenir, then test the remaining guests — let them earn theirs too ;)";
+
+      const KEY = {
+        q1: X1, q2: X2, q3: X3, q4: X4, q5: X5,
+        q6: X6, q7: X7, q8: X8, q9: X9, q10: X10
+      };
+
+      function getResultMessage(score) {
+        if (score <= 5) return MSG_1;
+        if (score <= 7) return MSG_2;
+        return MSG_3;
+      }
+
+      function validateAllAnswered() {
+        let ok = true;
+        document.querySelectorAll('.q').forEach(block => {
+          const name = 'q' + block.dataset.q;
+          const checked = form.querySelector(`input[name="${name}"]:checked`);
+          const hint = block.querySelector('.req');
+          if (!checked) {
+            ok = false;
+            hint.style.display = 'block';
+          } else {
+            hint.style.display = 'none';
+          }
+        });
+        return ok;
+      }
+
+      function scrollIntoViewSmooth(el){
+        try { el.scrollIntoView({behavior:'smooth', block:'center'}); }
+        catch(_) { el.scrollIntoView(); }
+      }
+
+      submitBtn.addEventListener('click', () => {
+        if (!validateAllAnswered()) {
+          const firstMissing = Array.from(document.querySelectorAll('.q'))
+            .find(block => !form.querySelector(`input[name="q${block.dataset.q}"]:checked`));
+          if (firstMissing) scrollIntoViewSmooth(firstMissing);
+          return;
+        }
+
+        let score = 0;
+        for (let i = 1; i <= 10; i++) {
+          const name = 'q' + i;
+          const chosen = form.querySelector(`input[name="${name}"]:checked`).value;
+          const correct = (KEY[name] || '').toUpperCase().trim();
+          if (chosen === correct) score++;
+        }
+
+        scoreLine.textContent = `Your score: ${score}/10`;
+        messageLine.textContent = getResultMessage(score);
+        messageLine.className = 'msg ' + (score >= 8 ? 'ok' : (score <= 5 ? 'bad' : ''));
+        resultBox.style.display = 'block';
+        scrollIntoViewSmooth(resultBox);
+      });
+
+      resetBtn.addEventListener('click', () => {
+        resultBox.style.display = 'none';
+        document.querySelectorAll('.req').forEach(h => h.style.display = 'none');
+      });
+    })();
+  </script>
+</body>
+</html>
